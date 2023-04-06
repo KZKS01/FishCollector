@@ -12,6 +12,19 @@
     {% endblock %}
 </head>
 <body>
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo" href="{% url 'home' %}">Fish Collector</a>
+            <ul class="right">
+                <li>
+                    <a href="{% url 'about' %}">About</a>
+                </li>
+                <li>
+                    <a href="{% url 'fishes_index' %}">View All Fishes</a>
+                </li>
+            </ul> 
+        </div>
+    </nav>
     {% block content %}
     {% endblock %}
     <footer>
