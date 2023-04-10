@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>My Fishes Empire</title>
+{% endblock %}
+
+{% block content %}
+<h1>My Fishies</h1>
+
+{% for fish in fishes %}
+<a href="{% url 'fish_detail' fish.id %}">
+    <div>
+        <span>
+            {{fish.name}}
+        </span>
+    </div>
+</a>
+
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Fish Detail</title>
+{% endblock %}
+
+{% block content %}
+<h1>Fish Detail</h1>
+
+<div>
+    {{ fish.name }}
+    <p>Species: {{ fish.species }}</p>
+    <p>Age: {{ fish.age }}</p>
+    <p>Description: {{ fish.description }}</p>
+</div>
+{% endblock %}
