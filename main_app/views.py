@@ -3,6 +3,8 @@ from .models import Fish
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView
 
 # Create your views here.
 
@@ -48,3 +50,23 @@ def fishes_index(request):
 def fish_detail(request, fish_id):
     fish = Fish.objects.get(id=fish_id)
     return render(request, 'fishes/fish_detail.html', {'fish':fish})
+
+class FishCreate(LoginRequiredMixin, CreateView):
+    model = Fish
+    fields = ('name', 'species', 'age','description') # specifics which fields we r providing data for
+    template_name = 'fishes/fish_form.html'
+
+    # take validated inputs to create a model instance
+    def form_valid(self,form): # self: the instance of the view that is handling the form submission. form parameter contains the validated form data.
+        # form.instance attr: the instance of the model that is being created or updated by the form
+        # overwrite its method before the form is created
+        form.instance.user = self.request.user # self.request.user: user that made the request to the view
+        # tells Django to execute the form_valid() method defined in the parent CreateView class
+        # & let it handle the task of creating the new Fish instance in the db
+        # The super() function allows us to reuse the code written in the parent class, and only add the specific functionality we want in the child class.
+        return super().form_valid(form)
+ 
+class FishUpdate(LoginRequiredMixin, UpdateView):
+    model = Fish
+    fields = ('name', 'species', 'age', 'description')
+    template_name = 'fishes/fish_form.html'

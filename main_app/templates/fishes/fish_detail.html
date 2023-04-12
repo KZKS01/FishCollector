@@ -13,4 +13,7 @@
     <p>Age: {{ fish.age }}</p>
     <p>Description: {{ fish.description }}</p>
 </div>
+<div>
+    <a href="{% url 'fish_update' fish.id %}">Update</a>
+</div>
 {% endblock %}
