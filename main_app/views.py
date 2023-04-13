@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # Create your views here.
 
@@ -43,7 +43,7 @@ def signup(request):
     
 @login_required
 def fishes_index(request):
-    fishes = Fish.objects.all()
+    fishes = Fish.objects.filter(user=request.user)
     return render(request, 'fishes/fishes_index.html', {'fishes': fishes})
 
 @login_required
@@ -70,3 +70,8 @@ class FishUpdate(LoginRequiredMixin, UpdateView):
     model = Fish
     fields = ('name', 'species', 'age', 'description')
     template_name = 'fishes/fish_form.html'
+
+class FishDelete(LoginRequiredMixin, DeleteView):
+    model = Fish
+    template_name = 'fishes/fish_confirm_delete.html'
+    success_url = '/fishes/'
