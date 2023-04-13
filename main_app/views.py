@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Fish
+from .models import Fish, Tank
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -40,7 +40,7 @@ def signup(request):
         'error': error_message
     })
     
-    
+# FISH 
 @login_required
 def fishes_index(request):
     fishes = Fish.objects.filter(user=request.user)
@@ -51,7 +51,7 @@ def fish_detail(request, fish_id):
     fish = Fish.objects.get(id=fish_id)
     return render(request, 'fishes/fish_detail.html', {'fish':fish})
 
-class FishCreate(LoginRequiredMixin, CreateView):
+class FishAdd(LoginRequiredMixin, CreateView):
     model = Fish
     fields = ('name', 'species', 'age','description') # specifics which fields we r providing data for
     template_name = 'fishes/fish_form.html'
@@ -75,3 +75,28 @@ class FishDelete(LoginRequiredMixin, DeleteView):
     model = Fish
     template_name = 'fishes/fish_confirm_delete.html'
     success_url = '/fishes/'
+
+
+# TANK
+def tanks_index(request):
+    tanks = Tank.objects.all()
+    return render(request, 'tanks/tanks_index.html', {'tanks':tanks})
+
+class TankAdd(LoginRequiredMixin, CreateView):
+    model = Tank
+    fields = ('size',)
+    template_name = 'tanks/tank_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class TankUpdate(LoginRequiredMixin, UpdateView):
+    model = Tank
+    fields = ('size', )
+    template_name = 'tanks/tank_form.html'
+
+class TankDelete(LoginRequiredMixin, DeleteView):
+    model = Tank
+    template_name = 'tanks/tank_confirm_delete.html'
+    success_url = '/tanks/'

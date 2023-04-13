@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>Add A Fish</title>
+<title>Add A Tank</title>
 {% endblock %}
 
 {% block content %}
 {% if object %}
-<h1>Update "{{object.name}}"</h1>
+<h1>Update "{{object.size}}" Tank</h1>
 {% else %}
-<h1>Add A Fish</h1>
+<h1>Add A Tank</h1>
 {% endif %}
 
 <form method="POST">
     {% csrf_token %}
     <table>
-        {{ form.as_table }}
+        {{form.as_table}}
     </table>
     <input type="submit" value="Submit" class="btn blue">
 </form>

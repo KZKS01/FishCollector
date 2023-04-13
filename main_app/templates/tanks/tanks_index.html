@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>All Tanks</title>
+{% endblock %}
+
+{% block content %}
+<h1>My Tanks</h1>
+
+{% for tank in tanks %}
+<div>
+     <span>{{tank.size}} Gallon Tank</span>
+     <a href="{% url 'tank_update' tank.id %}">Update</a>
+     <a href="{% url 'tank_delete' tank.id %}">Delete</a>
+</div>
+{% endfor %}
+
+{% endblock %}
