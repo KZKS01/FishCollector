@@ -30,3 +30,10 @@ class Tank(models.Model):
     
     def get_absolute_url(self):
         return reverse('tanks_index')
+    
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"photo of fish_id: {self.fish_id} @{self.url}"

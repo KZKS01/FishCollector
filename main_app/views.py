@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect
-from .models import Fish, Tank
+from .models import Fish, Tank, Photo
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+import boto3 #aws
+import uuid
+
+S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com/'
+BUCKET = 'fishcollector'
+
 
 # Create your views here.
 
@@ -26,7 +32,7 @@ def signup(request):
             user = form.save()
             # login the new user
             login(request,user)
-            # redirect to the cats index pg
+            # redirect to the fishes index pg
             return redirect('fishes_index')
         # else: generate err msg 'invalid input'
         else: 
@@ -100,3 +106,28 @@ class TankDelete(LoginRequiredMixin, DeleteView):
     model = Tank
     template_name = 'tanks/tank_confirm_delete.html'
     success_url = '/tanks/'
+
+
+# PHOTO
+def add_photo(request, fish_id):
+    # attempt to collect photo submission from request
+    photo_file = request.FILES.get('photo-file', None)# FILES: dictionary
+    # if photo file is present
+    if photo_file:
+        # set up a s3 client obj - obj w/methods for working with s3
+        s3 = boto3.client('s3')
+        # create a UNIQUE name for the photo file with uuid
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        
+        # try to upload file to aws s3
+        try:
+            # upload file to the specified s3 bucket via method: s3.upload_fileobj()
+            s3.upload_fileobj(photo_file, BUCKET, key) 
+            # save the url as a new instance of the Photo model
+            url = f'{S3_BASE_URL}{BUCKET}/{key}'
+            # new instance of the Photo model created with the url and fish_id val, associating the photo with the given fish_id 
+            Photo.objects.create(url=url, fish_id=fish_id)
+        # if error
+        except Exception as error:
+            print('Photo upload failed, error: ', error)
+        return redirect('fish_detail', fish_id=fish_id)

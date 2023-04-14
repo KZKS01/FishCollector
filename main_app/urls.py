@@ -17,4 +17,6 @@ urlpatterns = [
     path('tanks/add/', views.TankAdd.as_view(), name='tank_add'),
     path('tanks/<int:pk>/update/', views.TankUpdate.as_view(), name='tank_update'),
     path('tanks/<int:pk>/delete/', views.TankDelete.as_view(), name='tank_delete'),
+    # photo
+    path('fishes/<int:fish_id>/add_photo', views.add_photo, name='add_photo'),
 ]

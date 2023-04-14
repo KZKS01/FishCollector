@@ -8,12 +8,20 @@
 <h1>My Fishes</h1>
 
 {% for fish in fishes %}
-<a href="{% url 'fish_detail' fish.id %}">
-    <div>
-        <span>
-            {{fish.name}}
-        </span>
-    </div>
-</a>
+<div class="card">
+    <!-- <div class="card-image waves-effect waves-block waves-light">
+        <img src="images/sample-1.jpg"> -->
+        <!-- </div> -->
+        <div class="card-content">
+            <a href="{% url 'fish_detail' fish.id %}">
+            <span class="card-title activator grey-text text-darken-4">{{fish.name}}<i class="material-icons right"></i></span>
+            </a>
+        </div>
+        <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">{{fish.name}}<i class="material-icons right">close</i></span>
+                <p>Description: {{ fish.description }}</p>
+        </div>
+</div>   
+
 {% endfor %}
 {% endblock %}
