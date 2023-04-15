@@ -5,8 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
     {% block title %}
     <title>Fishes Empire</title>
     {% endblock %}
@@ -14,28 +18,40 @@
 <body>
     <header class="navbar-fixed">
         <nav>
+            <!-- Dropdown Structure -->
+            <ul id="dropdown1" class="dropdown-content">
+                <li>
+                    <a href="{% url 'fishes_index' %}" class="red-text lighten-2-text">View All Fishes</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="{% url 'fish_add' %}" class="red-text lighten-2-text">Add A Fish</a>
+                </li>
+            </ul>
+            <ul id="dropdown2" class="dropdown-content">
+                <li>
+                    <a href="{% url 'tanks_index' %}" class="red-text lighten-2-text">View All Tanks</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="{% url 'tank_add' %}" class="red-text lighten-2-text">Add A Tank</a>
+                </li>
+            </ul>
+            
             <div class="nav-wrapper">
-                <a class="brand-logo" href="{% url 'home' %}">Fishes Empire</a>
-                <ul class="right">
+                    <a href="{% url 'home' %}" class="brand-logo">Fishes Empire</a>
+                <ul class="right hide-on-med-and-down">
                     <li>
                         <a href="{% url 'about' %}">About</a>
                     </li>
                     {% if user.is_authenticated %}
-                    <li>
-                        <a href="{% url 'fishes_index' %}">View All Fishes</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'fish_add' %}">Add A Fish</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'tanks_index' %}">View All Tanks</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'tank_add' %}">Add A Tank</a>
-                    </li>
+                    <!-- Dropdown Trigger -->
+                    <li><a class="dropdown-trigger" data-target="dropdown1">Fish ▾</a></li>
+                    <li><a class="dropdown-trigger" data-target="dropdown2">Tank ▾</a></li>
                     <li>
                         <a href="{% url 'logout' %}">Logout</a>
                     </li>
+                    </ul>
                     {% else %}
                     <li>
                         <a href="{% url 'login' %}">Login</a>
@@ -47,6 +63,12 @@
                 </ul> 
          </div>
     </nav>
+
+    <script>
+        $(document).ready(function() {
+            $(".dropdown-trigger").dropdown();
+        });
+    </script>
 </header>
     <main class="container">
     {% block content %}
